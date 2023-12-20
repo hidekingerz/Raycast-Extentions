@@ -7,7 +7,7 @@ type useTwitterReturns = {
   createTweetContent: (values: FormValues) => TweetContent;
 };
 
-export const useSendTweet = (): useTwitterReturns => {
+export const useTweet = (): useTwitterReturns => {
   /**
    * フォームの値からツイートのメッセージを生成する
    * @param {FormValues} values

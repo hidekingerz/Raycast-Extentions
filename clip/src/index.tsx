@@ -1,8 +1,9 @@
-import { Form, ActionPanel, Action, showToast, Toast } from "@raycast/api";
-import { useSendTweet } from "./hooks/useSendTweet";
-import { useTweetValidator } from "./hooks/useTweetValidator";
+import { ActionPanel, Action, showToast, Toast, Form } from "@raycast/api";
+import { useTweet } from "./hooks/useTweet";
+import { useFormValidator } from "./hooks/useFormValidator";
 import { FormValues } from "./lib/types/tweetContents";
 import { getErrorMessage } from "./utils";
+import { useTweetValidator } from "./hooks/useTweetValidator";
 
 const defaultFormValues: FormValues = {
   body: "読んだ：",
@@ -11,17 +12,20 @@ const defaultFormValues: FormValues = {
 };
 
 export default function Command() {
-  const { createTweetContent, sendTweet } = useSendTweet();
-  const { urlError, setUrlError, dropUrlErrorIfNeeded, bodyError, setBodyError, dropBodyErrorIfNeeded, validTweet } =
-    useTweetValidator();
+  const { validTweet } = useTweetValidator();
+  const { createTweetContent, sendTweet } = useTweet();
+  const { urlError, dropUrlErrorIfNeeded, handleUrlOnBlur, bodyError, handleBodyOnBlur, dropBodyErrorIfNeeded } =
+    useFormValidator();
 
   const handleSubmit = async (values: FormValues) => {
     const tweet = createTweetContent(values);
+
+    if (!validTweet(tweet)) {
+      await showToast({ style: Toast.Style.Failure, title: "Invalid Tweet", message: "Tweets are not valid" });
+      return;
+    }
+
     try {
-      if (!validTweet(tweet)) {
-        await showToast({ style: Toast.Style.Failure, title: "Invalid Tweet", message: "Tweets are not valid" });
-        return;
-      }
       await sendTweet(tweet.text);
       await showToast({ title: "Tweet success!", message: "See X" });
     } catch (error) {
@@ -45,13 +49,7 @@ export default function Command() {
         error={bodyError}
         defaultValue={defaultFormValues.body}
         onChange={dropBodyErrorIfNeeded}
-        onBlur={(event) => {
-          if (event.target.value?.length == 0) {
-            setBodyError("The field shouldn't be empty!");
-          } else {
-            dropBodyErrorIfNeeded();
-          }
-        }}
+        onBlur={handleBodyOnBlur}
       />
       <Form.TextField
         id="url"
@@ -60,13 +58,7 @@ export default function Command() {
         error={urlError}
         defaultValue={defaultFormValues.url}
         onChange={dropUrlErrorIfNeeded}
-        onBlur={(event) => {
-          if (event.target.value?.length == 0) {
-            setUrlError("The field shouldn't be empty!");
-          } else {
-            dropUrlErrorIfNeeded();
-          }
-        }}
+        onBlur={handleUrlOnBlur}
       />
       <Form.Separator />
       <Form.TagPicker id="tag" title="Tag" defaultValue={defaultFormValues.tag}>

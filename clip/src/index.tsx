@@ -54,6 +54,7 @@ export default function Command() {
       <Form.TextField
         id="url"
         title="URL"
+        autoFocus={true}
         placeholder="Enter URL"
         error={urlError}
         defaultValue={defaultFormValues.url}

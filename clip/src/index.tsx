@@ -1,16 +1,19 @@
 import { Form, ActionPanel, Action, showToast, Toast } from "@raycast/api";
-import { useTwitter } from "./hooks/useTwitter";
-import { getErrorMessage } from "./utils";
+import { useSendTweet } from "./hooks/useSendTweet";
+import { useTweetValidator } from "./hooks/useTweetValidator";
 import { FormValues } from "./lib/types/tweetContents";
+import { getErrorMessage } from "./utils";
+
+const defaultFormValues: FormValues = {
+  body: "読んだ：",
+  url: "",
+  tag: ["#webclip"],
+};
 
 export default function Command() {
-  const { createTweetContent, validTweet, sendTweet } = useTwitter();
-
-  const defaultFormValues: FormValues = {
-    body: "読んだ：",
-    url: "https://",
-    tag: ["#webclip"],
-  };
+  const { createTweetContent, sendTweet } = useSendTweet();
+  const { urlError, setUrlError, dropUrlErrorIfNeeded, bodyError, setBodyError, dropBodyErrorIfNeeded, validTweet } =
+    useTweetValidator();
 
   const handleSubmit = async (values: FormValues) => {
     const tweet = createTweetContent(values);
@@ -35,8 +38,36 @@ export default function Command() {
       }
     >
       <Form.Description text="保管したいWeb記事をClip" />
-      <Form.TextField id="body" title={"Body"} placeholder={"Enter body"} defaultValue={defaultFormValues.body} />
-      <Form.TextField id="url" title="URL" placeholder="Enter URL" defaultValue={defaultFormValues.url} />
+      <Form.TextField
+        id="body"
+        title={"Body"}
+        placeholder={"Enter body"}
+        error={bodyError}
+        defaultValue={defaultFormValues.body}
+        onChange={dropBodyErrorIfNeeded}
+        onBlur={(event) => {
+          if (event.target.value?.length == 0) {
+            setBodyError("The field shouldn't be empty!");
+          } else {
+            dropBodyErrorIfNeeded();
+          }
+        }}
+      />
+      <Form.TextField
+        id="url"
+        title="URL"
+        placeholder="Enter URL"
+        error={urlError}
+        defaultValue={defaultFormValues.url}
+        onChange={dropUrlErrorIfNeeded}
+        onBlur={(event) => {
+          if (event.target.value?.length == 0) {
+            setUrlError("The field shouldn't be empty!");
+          } else {
+            dropUrlErrorIfNeeded();
+          }
+        }}
+      />
       <Form.Separator />
       <Form.TagPicker id="tag" title="Tag" defaultValue={defaultFormValues.tag}>
         <Form.TagPicker.Item value="#webclip" title="#webclip" />

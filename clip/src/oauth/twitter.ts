@@ -6,7 +6,7 @@ import fetch from "node-fetch";
 // As type of app choose: Native App
 // For the redirect URL enter: https://raycast.com/redirect
 // For the website URL enter: https://raycast.com
-const clientId = "your clientID";
+const clientId = "cHBRWnJMNjgzeVUtbG5KQUZvR0c6MTpjaQ";
 
 export function getClientId(): string {
   return clientId;

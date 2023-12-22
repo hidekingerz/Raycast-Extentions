@@ -14,9 +14,9 @@ import { useFormValidator } from "./hooks/useFormValidator";
 import { useTweetValidator } from "./hooks/useTweetValidator";
 import { useEffect, useState } from "react";
 import { useWebClip } from "./hooks/useWebClip";
+import ja from "./locale/ja.json";
 
 const { prefix } = getPreferenceValues<Preferences>();
-
 const defaultFormValues: FormValues = {
   body: prefix,
   url: "",
@@ -35,13 +35,17 @@ export default function Command() {
     const tweet = createTweetContent(values);
 
     if (!validTweet(tweet)) {
-      await showToast({ style: Toast.Style.Failure, title: "Invalid Tweet", message: "Tweets are not valid" });
+      await showToast({
+        style: Toast.Style.Failure,
+        title: ja.toast.error.invalidTweet.title,
+        message: ja.toast.error.invalidTweet.message,
+      });
       return;
     }
 
     try {
       await sendTweet(tweet.text);
-      await showToast({ title: "Tweet success!", message: "See X" });
+      await showToast({ title: ja.toast.success.sendTweet.title, message: ja.toast.success.sendTweet.message });
       // 値を初期化
       setFormValue(defaultFormValues);
     } catch (error) {
@@ -64,12 +68,12 @@ export default function Command() {
     <Form
       actions={
         <ActionPanel>
-          <Action.SubmitForm onSubmit={handleSubmit} />
-          <Action title="Open Extension Preferences" onAction={openExtensionPreferences} />
+          <Action.SubmitForm title={ja.action.submit} onSubmit={handleSubmit} />
+          <Action title={ja.action.openExtensionPreference} onAction={openExtensionPreferences} />
         </ActionPanel>
       }
     >
-      <Form.Description text="保管したいWeb記事をClip" />
+      <Form.Description text={ja.label.description} />
       <Form.TextField
         id="body"
         title={"Body"}

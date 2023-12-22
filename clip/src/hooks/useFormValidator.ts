@@ -1,5 +1,6 @@
 import { useCallback, useState } from "react";
 import { Form } from "@raycast/api";
+import ja from "../locale/ja.json";
 
 type useFormValidator = {
   urlError: string | undefined;
@@ -31,12 +32,12 @@ export const useFormValidator = (): useFormValidator => {
   const handleUrlOnBlur: (event: Form.Event<string>) => void = useCallback(
     (event: Form.Event<string>) => {
       if (event.target.value?.length == 0) {
-        setUrlError("The field shouldn't be empty!");
+        setUrlError(ja.label.required);
       } else {
         dropUrlErrorIfNeeded();
       }
     },
-    [setUrlError, dropUrlErrorIfNeeded],
+    [setUrlError, dropUrlErrorIfNeeded]
   );
 
   const [bodyError, setBodyError] = useState<string | undefined>();
@@ -59,12 +60,12 @@ export const useFormValidator = (): useFormValidator => {
   const handleBodyOnBlur: (event: Form.Event<string>) => void = useCallback(
     (event: Form.Event<string>): void => {
       if (event.target.value?.length == 0) {
-        setBodyError("The field shouldn't be empty!");
+        setBodyError(ja.label.required);
       } else {
         dropBodyErrorIfNeeded();
       }
     },
-    [setBodyError, dropBodyErrorIfNeeded],
+    [setBodyError, dropBodyErrorIfNeeded]
   );
 
   return {

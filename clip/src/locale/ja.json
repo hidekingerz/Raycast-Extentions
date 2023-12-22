@@ -1,0 +1,28 @@
+{
+  "label": {
+    "description": "WebPage Clip",
+    "required": "required"
+  },
+  "action": {
+    "submit": "Send",
+    "openExtensionPreference": "Setting"
+  },
+  "toast": {
+    "success": {
+      "sendTweet": {
+        "title": "Tweet success!",
+        "message": "See X"
+      }
+    },
+    "error": {
+      "invalidTweet": {
+        "title": "Invalid Tweet",
+        "message": "Tweets are not valid"
+      },
+      "invalidUrl": {
+        "title": "invalid URL",
+        "message": "Enter URL"
+      }
+    }
+  }
+}

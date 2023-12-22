@@ -2,6 +2,7 @@ import fetch from "node-fetch";
 import { URL } from "node:url";
 import * as cheerio from "cheerio";
 import { showToast, Toast } from "@raycast/api";
+import ja from "../locale/ja.json";
 
 type useParseWebClipReturns = {
   getTitle: (url: string) => Promise<string>;
@@ -33,7 +34,11 @@ export const useWebClip = (): useParseWebClipReturns => {
       const $ = cheerio.load(await response.text());
       return $("title").text();
     } else {
-      await showToast({ style: Toast.Style.Failure, title: "Invalid URL", message: "Enter URL" });
+      await showToast({
+        style: Toast.Style.Failure,
+        title: ja.toast.error.invalidUrl.title,
+        message: ja.toast.error.invalidUrl.message,
+      });
       return "";
     }
   };

@@ -1,11 +1,11 @@
-import { ActionPanel, Action, showToast, Toast, Form, openExtensionPreferences } from "@raycast/api";
-import { useTweet } from "./hooks/useTweet";
-import { useFormValidator } from "./hooks/useFormValidator";
+import { Action, ActionPanel, Form, openExtensionPreferences, showToast, Toast } from "@raycast/api";
 import { FormValues } from "./lib/types/tweetContents";
 import { getErrorMessage } from "./utils";
+import { useTweet } from "./hooks/useTweet";
+import { useFormValidator } from "./hooks/useFormValidator";
 import { useTweetValidator } from "./hooks/useTweetValidator";
 import { useEffect, useState } from "react";
-import { useParseWebClip } from "./hooks/useParseWebClip";
+import { useWebClip } from "./hooks/useWebClip";
 
 const defaultFormValues: FormValues = {
   body: "読んだ：",
@@ -16,7 +16,7 @@ const defaultFormValues: FormValues = {
 export default function Command() {
   const [formValue, setFormValue] = useState(defaultFormValues);
 
-  const { getWebClipTitle } = useParseWebClip();
+  const { getTitle } = useWebClip();
   const { validTweet } = useTweetValidator();
   const { createTweetContent, sendTweet } = useTweet();
   const { urlError, dropUrlErrorIfNeeded, handleUrlOnBlur, bodyError, handleBodyOnBlur, dropBodyErrorIfNeeded } =
@@ -43,7 +43,7 @@ export default function Command() {
   useEffect(() => {
     const timeout = setTimeout(async () => {
       if (!urlError) {
-        const title = await getWebClipTitle(formValue.url);
+        const title = await getTitle(formValue.url);
         const newTitle = defaultFormValues.body + title;
         setFormValue({ ...formValue, body: newTitle });
         return () => clearTimeout(timeout);

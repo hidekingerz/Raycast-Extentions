@@ -4,7 +4,7 @@ import * as cheerio from "cheerio";
 import { showToast, Toast } from "@raycast/api";
 
 type useParseWebClipReturns = {
-  getWebClipTitle: (url: string) => Promise<string>;
+  getTitle: (url: string) => Promise<string>;
 };
 
 const validateUrl = async (urlString: string) => {
@@ -16,8 +16,8 @@ const validateUrl = async (urlString: string) => {
   }
 };
 
-export const useParseWebClip = (): useParseWebClipReturns => {
-  const getWebClipTitle = async (url: string): Promise<string> => {
+export const useWebClip = (): useParseWebClipReturns => {
+  const getTitle = async (url: string): Promise<string> => {
     if (await validateUrl(url)) {
       const response = await fetch(url, { method: "GET" });
       const $ = cheerio.load(await response.text());
@@ -28,5 +28,5 @@ export const useParseWebClip = (): useParseWebClipReturns => {
     }
   };
 
-  return { getWebClipTitle };
+  return { getTitle };
 };

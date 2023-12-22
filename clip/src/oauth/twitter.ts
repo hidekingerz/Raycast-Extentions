@@ -8,10 +8,6 @@ import { getPreferenceValues } from "@raycast/api";
 // For the redirect URL enter: https://raycast.com/redirect
 // For the website URL enter: https://raycast.com
 
-type Preferences = {
-  clientId: string;
-};
-
 export function getClientId(): string {
   const { clientId } = getPreferenceValues<Preferences>();
   return clientId;
@@ -47,7 +43,7 @@ export async function authorize(): Promise<void> {
 
 export async function fetchTokens(
   authRequest: OAuth.AuthorizationRequest,
-  authCode: string,
+  authCode: string
 ): Promise<OAuth.TokenResponse> {
   const params = new URLSearchParams();
   params.append("client_id", getClientId());

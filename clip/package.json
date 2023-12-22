@@ -25,6 +25,22 @@
       "required": true,
       "title": "Twitter ClientID",
       "description": "Required to authenticate with X. See the official documentation for more information."
+    },
+    {
+      "name": "prefix",
+      "type": "textfield",
+      "default": "Reading: ",
+      "required": true,
+      "title": "Message Prefix",
+      "description": "Message body prefix"
+    },
+    {
+      "name": "tag",
+      "type": "textfield",
+      "default": "#webclip",
+      "required": true,
+      "title": "tag",
+      "description": "Message tag"
     }
   ],
   "dependencies": {

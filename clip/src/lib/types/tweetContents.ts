@@ -5,5 +5,4 @@ export type TweetContent = {
 export type FormValues = {
   url: string;
   body: string;
-  tag: string[];
 };

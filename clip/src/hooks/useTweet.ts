@@ -1,6 +1,7 @@
 import { authorize, getOAuthTokens } from "../oauth/twitter";
 import { TwitterApi } from "twitter-api-v2";
 import { FormValues, TweetContent } from "../lib/types/tweetContents";
+import { getPreferenceValues } from "@raycast/api";
 
 type useTwitterReturns = {
   createTweetContent: (values: FormValues) => TweetContent;
@@ -14,7 +15,8 @@ export const useTweet = (): useTwitterReturns => {
    * @returns {TweetContent}
    */
   const createTweetContent = (values: FormValues): TweetContent => {
-    const text = values.body + "\n\n" + values.url + "\n\n" + values.tag.join(" ");
+    const { tag } = getPreferenceValues<Preferences>();
+    const text = values.body + "\n\n" + values.url + "\n\n" + tag;
     return { text: text };
   };
 

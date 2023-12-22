@@ -1,4 +1,12 @@
-import { Action, ActionPanel, Form, openExtensionPreferences, showToast, Toast } from "@raycast/api";
+import {
+  Action,
+  ActionPanel,
+  Form,
+  openExtensionPreferences,
+  getPreferenceValues,
+  showToast,
+  Toast,
+} from "@raycast/api";
 import { FormValues } from "./lib/types/tweetContents";
 import { getErrorMessage } from "./utils";
 import { useTweet } from "./hooks/useTweet";
@@ -7,10 +15,11 @@ import { useTweetValidator } from "./hooks/useTweetValidator";
 import { useEffect, useState } from "react";
 import { useWebClip } from "./hooks/useWebClip";
 
+const { prefix } = getPreferenceValues<Preferences>();
+
 const defaultFormValues: FormValues = {
-  body: "読んだ：",
+  body: prefix,
   url: "",
-  tag: ["#webclip"],
 };
 
 export default function Command() {
@@ -88,18 +97,6 @@ export default function Command() {
         }}
         onBlur={handleUrlOnBlur}
       />
-      <Form.Separator />
-      <Form.TagPicker
-        id="tag"
-        title="Tag"
-        defaultValue={defaultFormValues.tag}
-        value={formValue.tag}
-        onChange={(newValue) => {
-          setFormValue({ ...formValue, tag: newValue });
-        }}
-      >
-        <Form.TagPicker.Item value="#webclip" title="#webclip" />
-      </Form.TagPicker>
     </Form>
   );
 }

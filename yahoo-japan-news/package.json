@@ -3,7 +3,7 @@
   "name": "yahoo-japan-news",
   "title": "Yahoo!Japan News",
   "description": "get Yahoo!Japan Top news",
-  "icon": "command-icon.png",
+  "icon": "yahoo-japan-icon.png",
   "author": "hidekingerz",
   "categories": [
     "News"

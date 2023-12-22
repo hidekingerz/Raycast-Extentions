@@ -36,7 +36,7 @@ export const useFormValidator = (): useFormValidator => {
         dropUrlErrorIfNeeded();
       }
     },
-    [setUrlError, dropUrlErrorIfNeeded]
+    [setUrlError, dropUrlErrorIfNeeded],
   );
 
   const [bodyError, setBodyError] = useState<string | undefined>();
@@ -64,7 +64,7 @@ export const useFormValidator = (): useFormValidator => {
         dropBodyErrorIfNeeded();
       }
     },
-    [setBodyError, dropBodyErrorIfNeeded]
+    [setBodyError, dropBodyErrorIfNeeded],
   );
 
   return {

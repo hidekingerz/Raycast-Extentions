@@ -7,6 +7,11 @@ type useParseWebClipReturns = {
   getTitle: (url: string) => Promise<string>;
 };
 
+/**
+ * URL のバリデーター
+ * @param {string} urlString
+ * @returns {Promise<boolean>}
+ */
 const validateUrl = async (urlString: string) => {
   try {
     new URL(urlString);
@@ -17,6 +22,11 @@ const validateUrl = async (urlString: string) => {
 };
 
 export const useWebClip = (): useParseWebClipReturns => {
+  /**
+   * 指定したURLのTitleタグの値をパースする
+   * @param {string} url
+   * @returns {Promise<string>}
+   */
   const getTitle = async (url: string): Promise<string> => {
     if (await validateUrl(url)) {
       const response = await fetch(url, { method: "GET" });

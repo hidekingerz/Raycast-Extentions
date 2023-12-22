@@ -5,24 +5,25 @@ import { showToast, Toast } from "@raycast/api";
 import ja from "../locale/ja.json";
 
 type useParseWebClipReturns = {
+  validateUrl: (urlString: string) => Promise<boolean>;
   getTitle: (url: string) => Promise<string>;
 };
 
-/**
- * URL のバリデーター
- * @param {string} urlString
- * @returns {Promise<boolean>}
- */
-const validateUrl = async (urlString: string) => {
-  try {
-    new URL(urlString);
-    return true;
-  } catch (error) {
-    return false;
-  }
-};
-
 export const useWebClip = (): useParseWebClipReturns => {
+  /**
+   * URL のバリデーター
+   * @param {string} urlString
+   * @returns {Promise<boolean>}
+   */
+  const validateUrl = async (urlString: string): Promise<boolean> => {
+    try {
+      new URL(urlString);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+
   /**
    * 指定したURLのTitleタグの値をパースする
    * @param {string} url
@@ -43,5 +44,5 @@ export const useWebClip = (): useParseWebClipReturns => {
     }
   };
 
-  return { getTitle };
+  return { getTitle, validateUrl };
 };

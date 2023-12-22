@@ -25,11 +25,24 @@ const defaultFormValues: FormValues = {
 export default function Command() {
   const [formValue, setFormValue] = useState(defaultFormValues);
 
-  const { getTitle } = useWebClip();
+  const { getTitle, validateUrl } = useWebClip();
   const { validTweet } = useTweetValidator();
   const { createTweetContent, sendTweet } = useTweet();
   const { urlError, dropUrlErrorIfNeeded, handleUrlOnBlur, bodyError, handleBodyOnBlur, dropBodyErrorIfNeeded } =
     useFormValidator();
+
+  useEffect(() => {
+    const timeout = setTimeout(async () => {
+      const isValidUrl = await validateUrl(formValue.url);
+      console.log(isValidUrl);
+      if (isValidUrl) {
+        const title = await getTitle(formValue.url);
+        const newTitle = defaultFormValues.body + title;
+        setFormValue({ ...formValue, body: newTitle });
+        return () => clearTimeout(timeout);
+      }
+    }, 1000);
+  }, [formValue.url]);
 
   const handleSubmit = async (values: FormValues) => {
     const tweet = createTweetContent(values);
@@ -52,17 +65,6 @@ export default function Command() {
       await showToast({ style: Toast.Style.Failure, title: "Error", message: getErrorMessage(error) });
     }
   };
-
-  useEffect(() => {
-    const timeout = setTimeout(async () => {
-      if (!urlError) {
-        const title = await getTitle(formValue.url);
-        const newTitle = defaultFormValues.body + title;
-        setFormValue({ ...formValue, body: newTitle });
-        return () => clearTimeout(timeout);
-      }
-    }, 1000);
-  }, [formValue.url]);
 
   return (
     <Form

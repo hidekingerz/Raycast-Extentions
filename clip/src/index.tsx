@@ -4,7 +4,8 @@ import { useFormValidator } from "./hooks/useFormValidator";
 import { FormValues } from "./lib/types/tweetContents";
 import { getErrorMessage } from "./utils";
 import { useTweetValidator } from "./hooks/useTweetValidator";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useParseWebClip } from "./hooks/useParseWebClip";
 
 const defaultFormValues: FormValues = {
   body: "読んだ：",
@@ -15,6 +16,7 @@ const defaultFormValues: FormValues = {
 export default function Command() {
   const [formValue, setFormValue] = useState(defaultFormValues);
 
+  const { getWebClipTitle } = useParseWebClip();
   const { validTweet } = useTweetValidator();
   const { createTweetContent, sendTweet } = useTweet();
   const { urlError, dropUrlErrorIfNeeded, handleUrlOnBlur, bodyError, handleBodyOnBlur, dropBodyErrorIfNeeded } =
@@ -38,6 +40,17 @@ export default function Command() {
     }
   };
 
+  useEffect(() => {
+    const timeout = setTimeout(async () => {
+      if (!urlError) {
+        const title = await getWebClipTitle(formValue.url);
+        const newTitle = defaultFormValues.body + title;
+        setFormValue({ ...formValue, body: newTitle });
+        return () => clearTimeout(timeout);
+      }
+    }, 1000);
+  }, [formValue.url]);
+
   return (
     <Form
       actions={
@@ -55,7 +68,7 @@ export default function Command() {
         error={bodyError}
         defaultValue={defaultFormValues.body}
         value={formValue.body}
-        onChange={(newValue) => {
+        onChange={async (newValue) => {
           dropBodyErrorIfNeeded();
           setFormValue({ ...formValue, body: newValue });
         }}
@@ -69,7 +82,7 @@ export default function Command() {
         error={urlError}
         defaultValue={defaultFormValues.url}
         value={formValue.url}
-        onChange={(newValue) => {
+        onChange={async (newValue) => {
           dropUrlErrorIfNeeded();
           setFormValue({ ...formValue, url: newValue });
         }}

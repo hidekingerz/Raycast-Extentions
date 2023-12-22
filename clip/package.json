@@ -29,6 +29,7 @@
   ],
   "dependencies": {
     "@raycast/api": "^1.64.3",
+    "cheerio": "^1.0.0-rc.12",
     "node-fetch": "^3.3.2",
     "twitter-api-v2": "^1.15.2"
   },
@@ -38,6 +39,7 @@
     "@types/react": "18.2.27",
     "eslint": "^8.51.0",
     "prettier": "^3.0.3",
+    "react-devtools": "^4.28.4",
     "typescript": "^5.2.2"
   },
   "scripts": {

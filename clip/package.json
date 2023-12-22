@@ -18,6 +18,15 @@
       "mode": "view"
     }
   ],
+  "preferences": [
+    {
+      "name": "clientId",
+      "type": "textfield",
+      "required": true,
+      "title": "Twitter ClientID",
+      "description": "Required to authenticate with X. See the official documentation for more information."
+    }
+  ],
   "dependencies": {
     "@raycast/api": "^1.64.3",
     "node-fetch": "^3.3.2",

@@ -1,14 +1,19 @@
 import { OAuth } from "@raycast/api";
 import fetch from "node-fetch";
+import { getPreferenceValues } from "@raycast/api";
 
 // Register a new OAuth app via https://developer.twitter.com/en/portal/dashboard
 // Select OAuth 2.0
 // As type of app choose: Native App
 // For the redirect URL enter: https://raycast.com/redirect
 // For the website URL enter: https://raycast.com
-const clientId = "cHBRWnJMNjgzeVUtbG5KQUZvR0c6MTpjaQ";
+
+type Preferences = {
+  clientId: string;
+};
 
 export function getClientId(): string {
+  const { clientId } = getPreferenceValues<Preferences>();
   return clientId;
 }
 

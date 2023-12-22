@@ -3,8 +3,8 @@ import { TwitterApi } from "twitter-api-v2";
 import { FormValues, TweetContent } from "../lib/types/tweetContents";
 
 type useTwitterReturns = {
-  sendTweet: (text: string) => Promise<void>;
   createTweetContent: (values: FormValues) => TweetContent;
+  sendTweet: (text: string) => Promise<void>;
 };
 
 export const useTweet = (): useTwitterReturns => {

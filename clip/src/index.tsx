@@ -1,9 +1,10 @@
-import { ActionPanel, Action, showToast, Toast, Form } from "@raycast/api";
+import { ActionPanel, Action, showToast, Toast, Form, openExtensionPreferences } from "@raycast/api";
 import { useTweet } from "./hooks/useTweet";
 import { useFormValidator } from "./hooks/useFormValidator";
 import { FormValues } from "./lib/types/tweetContents";
 import { getErrorMessage } from "./utils";
 import { useTweetValidator } from "./hooks/useTweetValidator";
+import { useState } from "react";
 
 const defaultFormValues: FormValues = {
   body: "読んだ：",
@@ -12,6 +13,8 @@ const defaultFormValues: FormValues = {
 };
 
 export default function Command() {
+  const [formValue, setFormValue] = useState(defaultFormValues);
+
   const { validTweet } = useTweetValidator();
   const { createTweetContent, sendTweet } = useTweet();
   const { urlError, dropUrlErrorIfNeeded, handleUrlOnBlur, bodyError, handleBodyOnBlur, dropBodyErrorIfNeeded } =
@@ -28,6 +31,8 @@ export default function Command() {
     try {
       await sendTweet(tweet.text);
       await showToast({ title: "Tweet success!", message: "See X" });
+      // 値を初期化
+      setFormValue(defaultFormValues);
     } catch (error) {
       await showToast({ style: Toast.Style.Failure, title: "Error", message: getErrorMessage(error) });
     }
@@ -38,6 +43,7 @@ export default function Command() {
       actions={
         <ActionPanel>
           <Action.SubmitForm onSubmit={handleSubmit} />
+          <Action title="Open Extension Preferences" onAction={openExtensionPreferences} />
         </ActionPanel>
       }
     >
@@ -48,7 +54,11 @@ export default function Command() {
         placeholder={"Enter body"}
         error={bodyError}
         defaultValue={defaultFormValues.body}
-        onChange={dropBodyErrorIfNeeded}
+        value={formValue.body}
+        onChange={(newValue) => {
+          dropBodyErrorIfNeeded();
+          setFormValue({ ...formValue, body: newValue });
+        }}
         onBlur={handleBodyOnBlur}
       />
       <Form.TextField
@@ -58,11 +68,23 @@ export default function Command() {
         placeholder="Enter URL"
         error={urlError}
         defaultValue={defaultFormValues.url}
-        onChange={dropUrlErrorIfNeeded}
+        value={formValue.url}
+        onChange={(newValue) => {
+          dropUrlErrorIfNeeded();
+          setFormValue({ ...formValue, url: newValue });
+        }}
         onBlur={handleUrlOnBlur}
       />
       <Form.Separator />
-      <Form.TagPicker id="tag" title="Tag" defaultValue={defaultFormValues.tag}>
+      <Form.TagPicker
+        id="tag"
+        title="Tag"
+        defaultValue={defaultFormValues.tag}
+        value={formValue.tag}
+        onChange={(newValue) => {
+          setFormValue({ ...formValue, tag: newValue });
+        }}
+      >
         <Form.TagPicker.Item value="#webclip" title="#webclip" />
       </Form.TagPicker>
     </Form>

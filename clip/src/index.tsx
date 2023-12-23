@@ -77,19 +77,6 @@ export default function Command() {
     >
       <Form.Description text={ja.label.description} />
       <Form.TextField
-        id="body"
-        title={"Body"}
-        placeholder={"Enter body"}
-        error={bodyError}
-        defaultValue={defaultFormValues.body}
-        value={formValue.body}
-        onChange={async (newValue) => {
-          dropBodyErrorIfNeeded();
-          setFormValue({ ...formValue, body: newValue });
-        }}
-        onBlur={handleBodyOnBlur}
-      />
-      <Form.TextField
         id="url"
         title="URL"
         autoFocus={true}
@@ -102,6 +89,19 @@ export default function Command() {
           setFormValue({ ...formValue, url: newValue });
         }}
         onBlur={handleUrlOnBlur}
+      />
+      <Form.TextArea
+        id="body"
+        title={"Body"}
+        placeholder={"Enter body"}
+        error={bodyError}
+        defaultValue={defaultFormValues.body}
+        value={formValue.body}
+        onChange={async (newValue) => {
+          dropBodyErrorIfNeeded();
+          setFormValue({ ...formValue, body: newValue });
+        }}
+        onBlur={handleBodyOnBlur}
       />
     </Form>
   );
